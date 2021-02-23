@@ -1,12 +1,32 @@
-body{
-    background-color:#2e2e2e;
+/* Required height of parents of the Half Page Carousel for proper displaying carousel itself */
+html,
+body,
+.view {
+  height: 100%; }
 
+/* Half Page Carousel itself*/
+.carousel {
+  height: 50%; }
+  .carousel .carousel-inner {
+    height: 100%; }
+    .carousel .carousel-inner .carousel-item,
+    .carousel .carousel-inner .active {
+      height: 100%; }
+
+/* Adjustment for mobile devices*/
+@media (max-width: 776px) {
+  .carousel {
+    height: 100%; } }
+
+/* Footer color for sake of consistency with Navbar */
+.page-footer {
+  background-color: #929FBA; }
+
+.mynav{
+  margin-top: 5rem ;
 }
-.all_product_paginations{
-    margin:0 auto;
-}
+.default-img{ height: 144px; }
+.green{background-color: #00c851!important;}
 
 
-.login{
-    color:whitesmoke;
-}
+

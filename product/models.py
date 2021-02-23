@@ -2,21 +2,43 @@ from django.db import models
 from django.utils.timezone import datetime
 from django.utils.translation import ugettext_lazy as _ #for translation 
 from django.urls import reverse
+from django.utils.text import slugify
 
 # Create your models here.
 
 class Product(models.Model):
     PRDName=models.CharField(max_length=100 , verbose_name=_("product name"))
-    PRDCategory=models.ForeignKey('Category', on_delete=models.CASCADE,blank=True, null=True)
-    PRDBrand=models.ForeignKey('settings.Brand',on_delete=models.CASCADE,blank=True, null=True)
+    PRDCategory=models.ForeignKey('Category', on_delete=models.CASCADE,blank=True, null=True,verbose_name=_("product category"))
+    PRDBrand=models.ForeignKey('settings.Brand',on_delete=models.CASCADE,blank=True, null=True,verbose_name=_("product Brand"))
     PRDDesc=models.TextField(verbose_name=_("product description"))
-    PRDPrice=models.DecimalField(max_digits=5 ,decimal_places=2, verbose_name=_("product price")) # verbose name is to be translated word
+    PRDImage=models.ImageField(upload_to='product/',verbose_name=_(" image"),blank=True, null=True)
+    PRDPrice=models.DecimalField(max_digits=5 ,decimal_places=2, verbose_name=_("product price"))
+    PRDDiscountPrice=models.DecimalField(max_digits=5 ,decimal_places=2, verbose_name=_("discount Pric"),blank=True, null=True)  # verbose name is to be translated word
     PRDCost=models.DecimalField(max_digits=5 ,decimal_places=2, verbose_name=_("product cost"))
     PRDCreated=models.DateTimeField( verbose_name=_("created_at"))
+
+    PRDSLug= models.SlugField(blank=True, null=True , verbose_name=_("Product URL"))
+    PRDISNew = models.BooleanField(default=True , verbose_name=_("New Product "))
+    PRDISBestSeller = models.BooleanField(default=False , verbose_name=_("Best Seller"))
     
+    
+    def save(self , *args , **kwargs):
+        if not self.PRDSLug :
+            self.PRDSLug = slugify(self.PRDName)
+        super(Product , self).save(*args , **kwargs)
+    
+    class Meta:
+        verbose_name = _("Product")
+        verbose_name_plural = _("Products")
+
+    def get_absolute_url(self):
+            return reverse('products:product_detail', kwargs={'slug': self.PRDSLug})
+
 
     def __str__(self):
         return self.PRDName
+
+      
 
 ## Category 
 ## Images 
